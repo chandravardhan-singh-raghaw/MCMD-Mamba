@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcmd-mamba"
+version = "0.1.0"
+description = "Multi-Channel Multi-Direction Mamba for fundus image classification"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0",
+    "torchvision",
+    "numpy",
+    "pyyaml",
+    "omegaconf",
+    "tqdm",
+    "scikit-learn",
+    "pillow",
+    "opencv-python",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-timeout",
+    "black",
+    "ruff",
+]
+hydra = ["hydra-core"]
+
+[project.scripts]
+mcmd-train = "mcmd_mamba.cli.train:main"
+mcmd-eval = "mcmd_mamba.cli.eval:main"
+mcmd-predict = "mcmd_mamba.cli.predict:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+# E2E test can be slow; override in test_stage1_stage2_e2e.py with timeout=180
+timeout = 60
+timeout_method = "thread"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]

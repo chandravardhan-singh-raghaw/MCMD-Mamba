@@ -1,0 +1,18 @@
+# MCMD-Mamba core dependencies (Python >=3.9)
+# Install: pip install -r requirements.txt
+
+torch>=2.0
+torchvision
+numpy
+pyyaml
+omegaconf
+tqdm
+scikit-learn
+pillow
+opencv-python
+
+# Optional dev (tests, lint): pip install -r requirements.txt -r requirements-dev.txt
+# pytest
+# pytest-cov
+# black
+# ruff

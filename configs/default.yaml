@@ -1,0 +1,53 @@
+# Common training config (base for all runs)
+seed: 42
+deterministic: true
+
+# Model: embed_dim, token_hw (-> L), num_classes from dataset
+model:
+  embed_dim: 256
+  token_hw: [14, 14]
+  stage1:
+    feat_ch: 256
+    d_model: 256
+    token_hw: [14, 14]
+    patch_size: 8
+    sharpen: 4.0
+  stage2:
+    num_blocks: 3
+    core_kind: mamba
+    conv_kernel: 3
+    merge: sum
+    dropout: 0.1
+  stage3:
+    dropout: 0.1
+
+train:
+  batch_size: 32  # reduce if OOM
+  num_workers: 4
+  max_epochs: 100
+  gradient_clip_val: 1.0
+  mixed_precision: true
+
+optimizer:
+  name: adamw
+  lr: 1.0e-4  # typical for fine-tuning
+  weight_decay: 0.01
+
+scheduler:
+  name: cosine
+  warmup_epochs: 5
+
+checkpoint:
+  dir: checkpoints
+  save_top_k: 2
+  monitor: val/accuracy
+  mode: max
+
+early_stopping:
+  patience: 15
+  monitor: val/accuracy
+  mode: max
+
+logging:
+  project: mcmd-mamba
+  save_dir: logs

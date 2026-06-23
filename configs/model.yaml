@@ -1,0 +1,28 @@
+# MCMD-Mamba model config: full model from config without editing code.
+# Keys: num_classes (from dataset), embed_dim, token_hw -> L, dropout, etc.
+
+model:
+  # Top-level: embed_dim / hidden_dim (alias for d_model), token_hw -> L = H*W
+  embed_dim: 256
+  token_hw: [14, 14]  # L = 14*14 = 196 tokens per scale; deterministic
+  # tokens_per_scale: inferred as token_hw[0] * token_hw[1]
+
+  stage1:
+    feat_ch: 256
+    d_model: 256  # can override with model.embed_dim
+    token_hw: [14, 14]
+    patch_size: 8
+    sharpen: 4.0
+
+  stage2:
+    num_blocks: 3  # paper: K=3 MD-Mamba blocks
+    core_kind: mamba  # dummy | mamba
+    conv_kernel: 3
+    merge: sum
+    dropout: 0.1
+
+  stage3:
+    dropout: 0.1
+    # head MLP dim: Stage3Head uses embed_dim=2*d_model for F_fuse; no extra hidden
+
+# num_classes: loaded from dataset config or passed to MCMDMamba(cfg, num_classes=N)
